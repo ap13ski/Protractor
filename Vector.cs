@@ -356,27 +356,6 @@ namespace VectorLibrary
 
         //
         // Summary:
-        //     Returns the result of multiplying source vector v
-        //     by a scalar k.
-        //
-        // Parameters:
-        //   v1:
-        //     Source vector.
-        //   k:
-        //     Double-precision floating-point number.
-        //
-        // Returns:
-        //     The result of multiplying by a scalaras an instance
-        //     of the Vector class.
-        public static Vector operator *(Vector v, double k)
-        {
-            if (k < 0) { k = 0; }
-            Vector vector = new Vector(v.X1, v.Y1, v.M * k, v.A, 1);
-            return vector;
-        }
-
-        //
-        // Summary:
         //     Returns the arccosine of the angle of the rectangular
         //     triangle formed by hypotenuse given by a line segment
         //     with a initial and terminal points and cathetus given
