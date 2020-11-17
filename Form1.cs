@@ -4,7 +4,7 @@ objects relative to the center of the angular grid.
 The Graphics.Drawline() method of the System.Drawing
 namespace is used for additional graphical drawings.
 The library of vector methods is located in Vector 
-class in VectorLibrary.cs file.
+class in Vector.cs file.
 */
 
 using System;
