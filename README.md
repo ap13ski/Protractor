@@ -15,5 +15,6 @@ How to get started using Protractor:
 - [x] Activate Blue and/or Red support lines by pressing the corresponding switch buttons in the lower left corner of the window. The angle values will appear on the status bar.
 - [x] By holding LMB at any point on the window, you can set the position of Blue support line. For better positioning accuracy, you can release LMB outside the Protractor window **anywhere** on the screen. By holding  RMB you can control the Red support line.
 - [x] You can copy the angle values using the buttons in the lower left corner of the window (under the support lines switch buttons).
-- [x] Window opacity is adjusted by the mouse scroller.
 - [x] Angle units are adjusted by the button with a gear icon on the status bar.
+- [x] Window opacity is adjusted by the mouse scroller.
+
