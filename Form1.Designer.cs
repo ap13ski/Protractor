@@ -1,4 +1,6 @@
-﻿namespace Protractor
+﻿using System.Windows.Forms;
+
+namespace Protractor
 {
     partial class Form1
     {
@@ -53,12 +55,12 @@
             this.toolSetAngleRed180 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleRed270 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuToolDecimal = new System.Windows.Forms.ToolStripMenuItem();
             this.menuToolAngular = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuToolDecimal = new System.Windows.Forms.ToolStripMenuItem();
             this.statusLabelBlue = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabelRed = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabelDelta = new System.Windows.Forms.ToolStripStatusLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,8 +68,8 @@
             // 
             this.buttonOpacityIncrease.FlatAppearance.BorderSize = 0;
             this.buttonOpacityIncrease.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonOpacityIncrease.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOpacityIncrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpacityIncrease.Image")));
+            this.buttonOpacityIncrease.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonOpacityIncrease.Image = ((System.Drawing.Image) (resources.GetObject("buttonOpacityIncrease.Image")));
             this.buttonOpacityIncrease.Location = new System.Drawing.Point(3, 3);
             this.buttonOpacityIncrease.Name = "buttonOpacityIncrease";
             this.buttonOpacityIncrease.Size = new System.Drawing.Size(20, 20);
@@ -80,8 +82,8 @@
             // 
             this.buttonOpacityDecrease.FlatAppearance.BorderSize = 0;
             this.buttonOpacityDecrease.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonOpacityDecrease.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonOpacityDecrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpacityDecrease.Image")));
+            this.buttonOpacityDecrease.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonOpacityDecrease.Image = ((System.Drawing.Image) (resources.GetObject("buttonOpacityDecrease.Image")));
             this.buttonOpacityDecrease.Location = new System.Drawing.Point(29, 3);
             this.buttonOpacityDecrease.Name = "buttonOpacityDecrease";
             this.buttonOpacityDecrease.Size = new System.Drawing.Size(20, 20);
@@ -95,20 +97,20 @@
             this.checkBoxAlwaysOnTop.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxAlwaysOnTop.FlatAppearance.BorderSize = 0;
             this.checkBoxAlwaysOnTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxAlwaysOnTop.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxAlwaysOnTop.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxAlwaysOnTop.Image")));
+            this.checkBoxAlwaysOnTop.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.checkBoxAlwaysOnTop.Image = ((System.Drawing.Image) (resources.GetObject("checkBoxAlwaysOnTop.Image")));
             this.checkBoxAlwaysOnTop.Location = new System.Drawing.Point(55, 3);
             this.checkBoxAlwaysOnTop.Name = "checkBoxAlwaysOnTop";
             this.checkBoxAlwaysOnTop.Size = new System.Drawing.Size(20, 20);
             this.checkBoxAlwaysOnTop.TabIndex = 3;
             this.checkBoxAlwaysOnTop.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxAlwaysOnTop, "Enable/disable mode Always on top");
+            this.toolTipMain.SetToolTip(this.checkBoxAlwaysOnTop, "Toggle \u0022Always on top\u0022 mode (T)");
             this.checkBoxAlwaysOnTop.UseVisualStyleBackColor = true;
             this.checkBoxAlwaysOnTop.CheckedChanged += new System.EventHandler(this.checkBoxAlwaysOnTop_CheckedChanged);
             // 
             // pictureBox
             // 
-            this.pictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox.BackgroundImage")));
+            this.pictureBox.BackgroundImage = ((System.Drawing.Image) (resources.GetObject("pictureBox.BackgroundImage")));
             this.pictureBox.InitialImage = null;
             this.pictureBox.Location = new System.Drawing.Point(91, 12);
             this.pictureBox.Name = "pictureBox";
@@ -124,15 +126,14 @@
             this.checkBoxShowLineBlue.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxShowLineBlue.FlatAppearance.BorderSize = 0;
             this.checkBoxShowLineBlue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowLineBlue.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxShowLineBlue.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxShowLineBlue.Image")));
+            this.checkBoxShowLineBlue.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.checkBoxShowLineBlue.Image = ((System.Drawing.Image) (resources.GetObject("checkBoxShowLineBlue.Image")));
             this.checkBoxShowLineBlue.Location = new System.Drawing.Point(3, 127);
             this.checkBoxShowLineBlue.Name = "checkBoxShowLineBlue";
             this.checkBoxShowLineBlue.Size = new System.Drawing.Size(20, 20);
             this.checkBoxShowLineBlue.TabIndex = 4;
             this.checkBoxShowLineBlue.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxShowLineBlue, "Show/hide Blue support line:\r\n – Press LMB on the form to draw the line \r\n – Hold" +
-        " LMB on the form and move the cursor to change the angle");
+            this.toolTipMain.SetToolTip(this.checkBoxShowLineBlue, "Show/hide the Blue support line (1):\r\n – Press LMB on the form to draw the line \r\n – Hold" + " LMB on the form and move the cursor to change the angle");
             this.checkBoxShowLineBlue.UseVisualStyleBackColor = true;
             this.checkBoxShowLineBlue.CheckedChanged += new System.EventHandler(this.checkBoxShowLineBlue_CheckedChanged);
             // 
@@ -148,15 +149,14 @@
             this.checkBoxShowLineRed.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxShowLineRed.FlatAppearance.BorderSize = 0;
             this.checkBoxShowLineRed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxShowLineRed.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxShowLineRed.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxShowLineRed.Image")));
+            this.checkBoxShowLineRed.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.checkBoxShowLineRed.Image = ((System.Drawing.Image) (resources.GetObject("checkBoxShowLineRed.Image")));
             this.checkBoxShowLineRed.Location = new System.Drawing.Point(29, 127);
             this.checkBoxShowLineRed.Name = "checkBoxShowLineRed";
             this.checkBoxShowLineRed.Size = new System.Drawing.Size(20, 20);
             this.checkBoxShowLineRed.TabIndex = 4;
             this.checkBoxShowLineRed.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxShowLineRed, "Show/hide Red support line:\r\n – Press RMB on the form to draw the line \r\n – Hold " +
-        "RMB on the form and move the cursor to change the angle");
+            this.toolTipMain.SetToolTip(this.checkBoxShowLineRed, "Show/hide the Red support line (2):\r\n – Press RMB on the form to draw the line \r\n – Hold " + "RMB on the form and move the cursor to change the angle");
             this.checkBoxShowLineRed.UseVisualStyleBackColor = true;
             this.checkBoxShowLineRed.CheckedChanged += new System.EventHandler(this.checkBoxShowLineRed_CheckedChanged);
             // 
@@ -164,8 +164,8 @@
             // 
             this.buttonCopyToClipboardRed.FlatAppearance.BorderSize = 0;
             this.buttonCopyToClipboardRed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCopyToClipboardRed.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonCopyToClipboardRed.Image = ((System.Drawing.Image)(resources.GetObject("buttonCopyToClipboardRed.Image")));
+            this.buttonCopyToClipboardRed.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonCopyToClipboardRed.Image = ((System.Drawing.Image) (resources.GetObject("buttonCopyToClipboardRed.Image")));
             this.buttonCopyToClipboardRed.Location = new System.Drawing.Point(29, 153);
             this.buttonCopyToClipboardRed.Name = "buttonCopyToClipboardRed";
             this.buttonCopyToClipboardRed.Size = new System.Drawing.Size(20, 20);
@@ -178,8 +178,8 @@
             // 
             this.buttonCopyToClipboardDelta.FlatAppearance.BorderSize = 0;
             this.buttonCopyToClipboardDelta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCopyToClipboardDelta.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonCopyToClipboardDelta.Image = ((System.Drawing.Image)(resources.GetObject("buttonCopyToClipboardDelta.Image")));
+            this.buttonCopyToClipboardDelta.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonCopyToClipboardDelta.Image = ((System.Drawing.Image) (resources.GetObject("buttonCopyToClipboardDelta.Image")));
             this.buttonCopyToClipboardDelta.Location = new System.Drawing.Point(55, 153);
             this.buttonCopyToClipboardDelta.Name = "buttonCopyToClipboardDelta";
             this.buttonCopyToClipboardDelta.Size = new System.Drawing.Size(20, 20);
@@ -192,8 +192,8 @@
             // 
             this.buttonCopyToClipboardBlue.FlatAppearance.BorderSize = 0;
             this.buttonCopyToClipboardBlue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCopyToClipboardBlue.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonCopyToClipboardBlue.Image = ((System.Drawing.Image)(resources.GetObject("buttonCopyToClipboardBlue.Image")));
+            this.buttonCopyToClipboardBlue.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonCopyToClipboardBlue.Image = ((System.Drawing.Image) (resources.GetObject("buttonCopyToClipboardBlue.Image")));
             this.buttonCopyToClipboardBlue.Location = new System.Drawing.Point(3, 153);
             this.buttonCopyToClipboardBlue.Name = "buttonCopyToClipboardBlue";
             this.buttonCopyToClipboardBlue.Size = new System.Drawing.Size(20, 20);
@@ -205,11 +205,7 @@
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusToolStrip,
-            this.statusLabelBlue,
-            this.statusLabelRed,
-            this.statusLabelDelta});
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.statusToolStrip, this.statusLabelBlue, this.statusLabelRed, this.statusLabelDelta});
             this.statusStrip1.Location = new System.Drawing.Point(0, 296);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(350, 27);
@@ -222,13 +218,8 @@
             this.statusToolStrip.AutoSize = false;
             this.statusToolStrip.AutoToolTip = false;
             this.statusToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.statusToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolSetBlueAngle,
-            this.toolSetRedAngle,
-            this.toolStripSeparator1,
-            this.menuToolAngular,
-            this.menuToolDecimal});
-            this.statusToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("statusToolStrip.Image")));
+            this.statusToolStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetBlueAngle, this.toolSetRedAngle, this.toolStripSeparator1, this.menuToolAngular, this.menuToolDecimal});
+            this.statusToolStrip.Image = ((System.Drawing.Image) (resources.GetObject("statusToolStrip.Image")));
             this.statusToolStrip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.statusToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.statusToolStrip.Name = "statusToolStrip";
@@ -237,11 +228,7 @@
             // 
             // toolSetBlueAngle
             // 
-            this.toolSetBlueAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolSetAngleBlue0,
-            this.toolSetAngleBlue90,
-            this.toolSetAngleBlue180,
-            this.toolSetAngleBlue270});
+            this.toolSetBlueAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleBlue0, this.toolSetAngleBlue90, this.toolSetAngleBlue180, this.toolSetAngleBlue270});
             this.toolSetBlueAngle.Enabled = false;
             this.toolSetBlueAngle.Name = "toolSetBlueAngle";
             this.toolSetBlueAngle.Size = new System.Drawing.Size(218, 26);
@@ -277,11 +264,7 @@
             // 
             // toolSetRedAngle
             // 
-            this.toolSetRedAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolSetAngleRed0,
-            this.toolSetAngleRed90,
-            this.toolSetAngleRed180,
-            this.toolSetAngleRed270});
+            this.toolSetRedAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleRed0, this.toolSetAngleRed90, this.toolSetAngleRed180, this.toolSetAngleRed270});
             this.toolSetRedAngle.Enabled = false;
             this.toolSetRedAngle.Name = "toolSetRedAngle";
             this.toolSetRedAngle.Size = new System.Drawing.Size(218, 26);
@@ -320,14 +303,6 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(215, 6);
             // 
-            // menuToolDecimal
-            // 
-            this.menuToolDecimal.CheckOnClick = true;
-            this.menuToolDecimal.Name = "menuToolDecimal";
-            this.menuToolDecimal.Size = new System.Drawing.Size(218, 26);
-            this.menuToolDecimal.Text = "decimal";
-            this.menuToolDecimal.CheckedChanged += new System.EventHandler(this.menuToolDecimal_CheckedChanged);
-            // 
             // menuToolAngular
             // 
             this.menuToolAngular.Checked = true;
@@ -337,6 +312,14 @@
             this.menuToolAngular.Size = new System.Drawing.Size(218, 26);
             this.menuToolAngular.Text = "angular";
             this.menuToolAngular.CheckedChanged += new System.EventHandler(this.menuToolAngular_CheckedChanged);
+            // 
+            // menuToolDecimal
+            // 
+            this.menuToolDecimal.CheckOnClick = true;
+            this.menuToolDecimal.Name = "menuToolDecimal";
+            this.menuToolDecimal.Size = new System.Drawing.Size(218, 26);
+            this.menuToolDecimal.Text = "decimal";
+            this.menuToolDecimal.CheckedChanged += new System.EventHandler(this.menuToolDecimal_CheckedChanged);
             // 
             // statusLabelBlue
             // 
@@ -374,50 +357,50 @@
             this.Controls.Add(this.pictureBox);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Opacity = 0.9D;
-            this.Text = "Protractor";
+            this.Text = "Protractor 1.1 (press F1 for help)";
+            this.PreviewKeyDown +=new PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
-        #endregion
-
-        private System.Windows.Forms.Button buttonOpacityIncrease;
-        private System.Windows.Forms.Button buttonOpacityDecrease;
-        private System.Windows.Forms.CheckBox checkBoxAlwaysOnTop;
-        private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.CheckBox checkBoxShowLineBlue;
-        private System.Windows.Forms.ToolTip toolTipMain;
         private System.Windows.Forms.Button buttonCopyToClipboardBlue;
-        private System.Windows.Forms.CheckBox checkBoxShowLineRed;
-        private System.Windows.Forms.Button buttonCopyToClipboardRed;
         private System.Windows.Forms.Button buttonCopyToClipboardDelta;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabelBlue;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabelRed;
-        private System.Windows.Forms.ToolStripStatusLabel statusLabelDelta;
-        private System.Windows.Forms.ToolStripMenuItem menuToolDecimal;
+        private System.Windows.Forms.Button buttonCopyToClipboardRed;
+        private System.Windows.Forms.Button buttonOpacityDecrease;
+        private System.Windows.Forms.Button buttonOpacityIncrease;
+        private System.Windows.Forms.CheckBox checkBoxAlwaysOnTop;
+        private System.Windows.Forms.CheckBox checkBoxShowLineBlue;
+        private System.Windows.Forms.CheckBox checkBoxShowLineRed;
         private System.Windows.Forms.ToolStripMenuItem menuToolAngular;
+        private System.Windows.Forms.ToolStripMenuItem menuToolDecimal;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabelBlue;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabelDelta;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabelRed;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton statusToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue0;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue180;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue270;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue90;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed0;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed180;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed270;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed90;
         private System.Windows.Forms.ToolStripMenuItem toolSetBlueAngle;
         private System.Windows.Forms.ToolStripMenuItem toolSetRedAngle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue0;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue90;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue180;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue270;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed0;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed90;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed180;
-        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed270;
-        private System.Windows.Forms.ToolStripDropDownButton statusToolStrip;
+        private System.Windows.Forms.ToolTip toolTipMain;
+
+        #endregion
     }
 }
 

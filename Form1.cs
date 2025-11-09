@@ -60,7 +60,7 @@ namespace Protractor
 
             // Mouse event handler in this_MouseWheel() method
             MouseWheel += new MouseEventHandler(this_MouseWheel);
-
+            
             /*
             To avoid incorrect scaling of components on the form 
             by the operating system (100%, 125%, 150%) their sizes
@@ -68,8 +68,18 @@ namespace Protractor
             */
             SetFormProperties();
 
+            ShowLines();
+
             UpdateTooltipOpacity();
             UpdateTooltipAngles();
+        }
+
+        private void ShowLines()
+        {
+            SetVectorAngle(v1, 60);
+            SetVectorAngle(v2, 30);
+            checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
+            checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
         }
 
         /*
@@ -79,10 +89,10 @@ namespace Protractor
         */
         private void UpdateTooltipOpacity()
         {
-            toolTipMain.SetToolTip(buttonOpacityIncrease,
-            $"Current opacity: {Convert.ToString(Opacity * 100)}%\nIncrease opacity (Mouse Wheel Up)");
-            toolTipMain.SetToolTip(buttonOpacityDecrease,
-            $"Current opacity: {Convert.ToString(Opacity * 100)}%\nDecrease opacity (Mouse Wheel Down)");
+            string str_inc = string.Format("Current opacity: {0}%\nIncrease opacity (Mouse Wheel Up)", Convert.ToString(Opacity * 100));
+            string str_dec = string.Format("Current opacity: {0}%\nDecrease opacity (Mouse Wheel Down)", Convert.ToString(Opacity * 100));
+            toolTipMain.SetToolTip(buttonOpacityIncrease, str_inc);
+            toolTipMain.SetToolTip(buttonOpacityDecrease, str_dec);
         }
 
         /*
@@ -93,12 +103,13 @@ namespace Protractor
         */
         private void UpdateTooltipAngles()
         {
-            toolTipMain.SetToolTip(buttonCopyToClipboardBlue,
-            $"Blue angle value: {GetAngleValueVector(v1, 12)}\nCopy to the clipboard (Ctrl + X)");
-            toolTipMain.SetToolTip(buttonCopyToClipboardRed,
-            $"Red angle value: {GetAngleValueVector(v2, 12)}\nCopy to the clipboard (Ctrl + C)");
-            toolTipMain.SetToolTip(buttonCopyToClipboardDelta,
-            $"Delta angle value: {GetAngleValueDelta(v1, v2, 12)}\nCopy to the clipboard (Ctrl + V)");
+            string str_blue = string.Format("Blue angle value: {0}\nCopy to the clipboard (X)", GetAngleValueVector(v1, 12));
+            string str_red = string.Format("Red angle value: {0}\nCopy to the clipboard (C)", GetAngleValueVector(v2, 12));
+            string str_delta = string.Format("Delta angle value: {0}\nCopy to the clipboard (V)", GetAngleValueDelta(v1, v2, 12));
+            
+            toolTipMain.SetToolTip(buttonCopyToClipboardBlue, str_blue);
+            toolTipMain.SetToolTip(buttonCopyToClipboardRed, str_red);
+            toolTipMain.SetToolTip(buttonCopyToClipboardDelta, str_delta);
         }
 
         /*
@@ -174,19 +185,23 @@ namespace Protractor
         */
         private void UpdateLabelAngles()
         {
+            string str_blue = string.Format("Blue: {0}", GetAngleValueVector(v1, 6));
+            string str_red = string.Format("Red: {0}", GetAngleValueVector(v2, 6));
+            string str_delta = string.Format("Delta: {0}", GetAngleValueDelta(v1, v2, 6));
+            
             if (isBlueLine && !isRedLine)
             {
-                statusLabelBlue.Text = $"Blue: {GetAngleValueVector(v1, 6)}";
+                statusLabelBlue.Text = str_blue;
             }
             else if (isRedLine && !isBlueLine)
             {
-                statusLabelRed.Text = $"Red: {GetAngleValueVector(v2, 6)}";
+                statusLabelRed.Text = str_red;
             }
             else if (isBlueLine && isRedLine)
             {
-                statusLabelBlue.Text = $"Blue: {GetAngleValueVector(v1, 6)}";
-                statusLabelRed.Text = $"Red: {GetAngleValueVector(v2, 6)}";
-                statusLabelDelta.Text = $"Delta: {GetAngleValueDelta(v1, v2, 6)}";
+                statusLabelBlue.Text = str_blue;
+                statusLabelRed.Text = str_red;
+                statusLabelDelta.Text = str_delta;
             }
         }
 
@@ -212,8 +227,10 @@ namespace Protractor
         // of the form.
         private void this_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (e.Delta > 0) { OpacityUp(); }
-            else { OpacityDown(); }
+            if (e.Delta > 0)
+                { OpacityUp(); }
+            else
+                { OpacityDown(); }
         }
 
         // Copies the vector angle value transmitted as a parameter
@@ -267,16 +284,14 @@ namespace Protractor
         // the form visibility always on top of all windows property.
         private void checkBoxAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxAlwaysOnTop.Checked) { TopMost = true; }
-            else { TopMost = false; }
+            if (checkBoxAlwaysOnTop.Checked)
+                { TopMost = true; }
+            else
+                { TopMost = false; }
         }
 
-        /*
-        Event handler of changing checkbox state. Switches visibility
-        of the blue line and redraws all the lines depending on the
-        settings of blue and red lines appearance.
-        */
-        private void checkBoxShowLineBlue_CheckedChanged(object sender, EventArgs e)
+
+        private void ShowLineBlue()
         {
             if (checkBoxShowLineBlue.Checked)
             {
@@ -297,12 +312,19 @@ namespace Protractor
             RedrawLines();
         }
 
+
         /*
         Event handler of changing checkbox state. Switches visibility
-        of the red line and redraws all the lines depending on the
+        of the blue line and redraws all the lines depending on the
         settings of blue and red lines appearance.
         */
-        private void checkBoxShowLineRed_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxShowLineBlue_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowLineBlue();
+        }
+
+
+        private void ShowLineRed()
         {
             if (checkBoxShowLineRed.Checked)
             {
@@ -323,6 +345,18 @@ namespace Protractor
             RedrawLines();
         }
 
+
+
+        /*
+        Event handler of changing checkbox state. Switches visibility
+        of the red line and redraws all the lines depending on the
+        settings of blue and red lines appearance.
+        */
+        private void checkBoxShowLineRed_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowLineRed();
+        }
+
         /*
         Returns as a string the angle value in angular units:
         degrees, minutes and seconds by converting a decimal 
@@ -334,7 +368,10 @@ namespace Protractor
             double decimalpart = a - Math.Truncate(a);
             double m = Math.Truncate(decimalpart * 60);
             double s = Math.Truncate(decimalpart * 3600) - Math.Truncate(m) * 60;
-            return $"{integerpart}\u00b0 {m}' {s}\u0022";    // \u0022 - Unicode symbol "
+            
+            string str_result = string.Format("{0}\u00b0 {1}' {2}\u0022", integerpart, m, s);// \u0022 - Unicode symbol "
+            
+            return str_result;    
         }
 
         /*
@@ -346,8 +383,14 @@ namespace Protractor
         */
         private string GetAngleValueVector(Vector vector, byte r)
         {
-            if (isAngleInDegrees) { return $"{ConvertAngleToDegrees(vector.A)}"; }
-            else { return $"{Convert.ToString(Math.Round(vector.A, r))}\u00b0"; }
+            string str_result;
+            
+            if (isAngleInDegrees)
+                { str_result = string.Format("{0}", ConvertAngleToDegrees(vector.A)); }
+            else
+                { str_result = string.Format("{0}\u00b0", Convert.ToString(Math.Round(vector.A, r))); }
+            
+            return str_result;
         }
 
         /*
@@ -359,8 +402,14 @@ namespace Protractor
         */
         private string GetAngleValueDelta(Vector vector1, Vector vector2, byte r)
         {
-            if (isAngleInDegrees) { return $"{ConvertAngleToDegrees(AverageAngleMin(vector1.A, vector2.A, r))}"; }
-            else { return $"{AverageAngleMin(vector1.A, vector2.A, r)}\u00b0"; }
+            string str_result;
+            
+            if (isAngleInDegrees)
+            { str_result = string.Format("{0}", ConvertAngleToDegrees(AverageAngleMin(vector1.A, vector2.A, r))); }
+            else
+            { str_result = string.Format("{0}\u00b0", AverageAngleMin(vector1.A, vector2.A, r)); }
+            
+            return str_result;
         }
 
         /*
@@ -423,8 +472,10 @@ namespace Protractor
         // Uses an object e as a mouse event handler.
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) { isDownLMB = true; }
-            if (e.Button == MouseButtons.Right) { isDownRMB = true; }
+            if (e.Button == MouseButtons.Left)
+                { isDownLMB = true; }
+            if (e.Button == MouseButtons.Right)
+                { isDownRMB = true; }
 
             if (isBlueLine && e.Button == MouseButtons.Left)
             {
@@ -464,40 +515,210 @@ namespace Protractor
         // the cursor coordinates. Uses an object e as a mouse event handler.
         private void UpdateVector(Vector vector, object sender, MouseEventArgs e)
         {
-            int newX = ((e.X) - pictureBox.Width / 2);   // New X-coordinate
-            int newY = -((e.Y) - pictureBox.Height / 2); // New Y-coordinate
-            double newA = Vector.GetAngleByPoints(0, 0, newX, newY); // New angle
+            int new_x = ((e.X) - pictureBox.Width / 2);   // New X-coordinate
+            int new_y = -((e.Y) - pictureBox.Height / 2); // New Y-coordinate
+            double new_angle = Vector.GetAngleByPoints(0, 0, new_x, new_y); // New angle
             double m = 205; // Standard length of support vector for current grid
 
-            vector.SetVectorByAngle(0, 0, m, newA);
+            vector.SetVectorByAngle(0, 0, m, new_angle);
+        }
+
+        /*
+         * Some key presses, such as the TAB, RETURN, ESC, and arrow keys, are typically
+         * ignored by some controls because they are not considered input key presses.
+         * For example, by default, a Button control ignores the arrow keys.
+         * Pressing the arrow keys typically causes the focus to move to the previous
+         * or next control. The arrow keys are considered navigation keys and pressing
+         * these keys typically do not raise the KeyDown event for a Button.
+         * However, pressing the arrow keys for a Button does raise the PreviewKeyDown event.
+         * By handling the PreviewKeyDown event for a Button and setting the IsInputKey
+         * property to true, you can raise the KeyDown event when the arrow keys are pressed.
+         * However, if you handle the arrow keys, the focus will no longer move
+         * to the previous or next control.
+         *
+         * See MSDN Control.PreviewKeyDown Event 
+         */
+        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Right:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+
+        private void ShowHelp()
+        {
+            string msg_text = "Protractor 1.1 64-bit\n" +
+                              "Created by ap13ski\n" +
+                              "https://github.com/ap13ski\n" +
+                              "ap13ski@gmail.com\n\n\n" +
+                              "Press [F1] to show this information window.\n\n" +
+                              "Activate the Blue support line (BSL) and/or the Red support line (RSL)" +
+                              " using their corresponding switches in the lower-left corner" +
+                              " of the window or press [1] or [2]." +
+                              " The angle values will be displayed on the status bar.\n\n" +
+                              "To position the BSL (the RSL), click and hold the left (right) mouse button" +
+                              " anywhere in the window. For greater precision, you can release" +
+                              " the mouse button *anywhere* on the screen, including the area outside" +
+                              " the window.\n\n" +
+                              "Adjust the window opacity using the mouse wheel. Press [T] to toggle" +
+                              " \u0022Always on top\u0022 mode.\n\nUse the gear icon button" +
+                              " on the status bar or press [U] to toggle the angle value units." +
+                              " Press [A] to set angular units (d\u00b0 m' s\u0022), press [D] to set" +
+                              " decimal units (d,nnn\u00b0). This menu also allows you to set" +
+                              " fixed angle values of the support lines.\n\n" +
+                              "Copy the angle values using the buttons in the lower-left corner of the window," +
+                              " located below the BSL and the RSL switches, or with [X], [C], [V].\n\n" +
+                              "Move the window with the arrow keys [\u2191], [\u2193], [\u2190], [\u2192] by 1 px." +
+                              " Hold [Ctrl] or [Alt] to move the window by 10 px or 50 px, respectively." +
+                              " Press [Home] to center the window on the screen.\n\n";
+            
+            string msg_caption = "Information";
+            var msg_buttons = MessageBoxButtons.OK;
+            var msg_icon = MessageBoxIcon.Information;
+
+            MessageBox.Show(this, msg_text, msg_caption, msg_buttons, msg_icon);
+        }
+
+        private void FormMoveCenter()
+        {
+            Screen screen = Screen.FromControl(this);
+    
+            this.Left = (screen.Bounds.Width - this.Width) / 2;
+            this.Top = (screen.Bounds.Height - this.Height) / 2;
+        }
+        
+        private void FormMoveDirection(string str_dir, int value)
+        {
+            if (str_dir == "UP")
+                { this.Top -= value; }
+            
+            if (str_dir == "DOWN")
+                { this.Top += value; }
+            
+            if (str_dir == "LEFT")
+                { this.Left -= value; }
+            
+            if (str_dir == "RIGHT")
+                { this.Left += value; }
+        }
+        
+        // This provides a reliable solution to prevent the issue of window movement         
+        // via arrow keys becoming unresponsive when the form's TopMost property is set to true.
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up || keyData == Keys.Down || 
+                keyData == Keys.Left || keyData == Keys.Right)
+            {
+                int value = 1;
+                
+                if (keyData == Keys.Up)
+                { FormMoveDirection("UP", value); }
+                else if (keyData == Keys.Down)
+                { FormMoveDirection("DOWN", value); }
+                else if (keyData == Keys.Left)
+                { FormMoveDirection("LEFT", value); }
+                else if (keyData == Keys.Right)
+                { FormMoveDirection("RIGHT", value); }
+
+                return true;
+            }
+    
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         // Hotkeys processing. Uses an object e as a keyboard event handler.
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.X && e.Control)
+            if (e.KeyCode == Keys.T)
+            {
+                checkBoxAlwaysOnTop.Checked = !checkBoxAlwaysOnTop.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.X)
             {
                 CopyToClipboardVector(v1);
                 e.Handled = true;
             }
-            if (e.KeyCode == Keys.C && e.Control)
+            
+            if (e.KeyCode == Keys.C)
             {
                 CopyToClipboardVector(v2);
                 e.Handled = true;
             }
-            if (e.KeyCode == Keys.V && e.Control)
+            
+            if (e.KeyCode == Keys.V)
             {
                 CopyToClipboardDelta(v1, v2);
                 e.Handled = true;
             }
-            if (e.KeyCode == Keys.Q && e.Control)
+
+            if (e.KeyCode == Keys.F1)
             {
-                SetAngular();
+                ShowHelp();
                 e.Handled = true;
             }
-            if (e.KeyCode == Keys.W && e.Control)
+            
+            if (e.KeyCode == Keys.Home)
             {
-                SetDecimal();
+                FormMoveCenter();
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                int value = 1;
+
+                if (e.Control && !e.Alt)
+                    { value = 10; }
+                if (!e.Control && e.Alt)
+                    { value = 50; }
+
+                if (e.KeyCode == Keys.Up)
+                    { FormMoveDirection("UP", value); }
+                if (e.KeyCode == Keys.Down)
+                    { FormMoveDirection("DOWN", value); }
+                if (e.KeyCode == Keys.Left)
+                    { FormMoveDirection("LEFT", value); }
+                if (e.KeyCode == Keys.Right)
+                    { FormMoveDirection("RIGHT", value); }
+
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.D1)
+            {
+                checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D2)
+            {
+                checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.U)
+            {
+                menuToolAngular.Checked = !menuToolAngular.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.A)
+            {
+                menuToolAngular.Checked = true;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D)
+            {
+                menuToolDecimal.Checked = true;
                 e.Handled = true;
             }
         }
@@ -510,8 +731,11 @@ namespace Protractor
         private double AverageAngleMin(double a1, double a2, byte r)
         {
             double delta = Math.Round(Math.Abs(a1 - a2), r);
-            if (delta > 180) { return 360 - delta; }
-            else { return delta; }
+            
+            if (delta > 180)
+                { return 360 - delta; }
+            else 
+                { return delta; }
         }
 
         /*
@@ -521,8 +745,10 @@ namespace Protractor
         */
         private void menuToolAngular_CheckedChanged(object sender, EventArgs e)
         {
-            if (menuToolAngular.Checked) { SetAngular(); }
-            else { SetDecimal(); }
+            if (menuToolAngular.Checked)
+                { SetAngular(); }
+            else 
+                { SetDecimal(); }
         }
 
         /*
@@ -532,8 +758,10 @@ namespace Protractor
         */
         private void menuToolDecimal_CheckedChanged(object sender, EventArgs e)
         {
-            if (menuToolDecimal.Checked) { SetDecimal(); }
-            else { SetAngular(); }
+            if (menuToolDecimal.Checked)
+                { SetDecimal(); }
+            else 
+                { SetAngular(); }
         }
 
         // Changes the representation of the decimal part of the angle value
@@ -641,8 +869,8 @@ namespace Protractor
             statusLabelDelta.ForeColor = System.Drawing.Color.Black;
             statusLabelDelta.Text = "";
 
-            menuToolAngular.Text = "Format: d\u00b0 m' s\u0022 (Ctrl + Q)"; // \u0022 unicode symbol "
-            menuToolDecimal.Text = "Format: d,nnn\u00b0 (Ctrl + W)"; // \u00b0 unicode symbol °
+            menuToolAngular.Text = "Format: d\u00b0 m' s\u0022 (A)"; // \u0022 unicode symbol "
+            menuToolDecimal.Text = "Format: d,nnn\u00b0 (D)"; // \u00b0 unicode symbol °
         }
     }
 }
