@@ -37,6 +37,7 @@ namespace Protractor
             this.checkBoxAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.checkBoxShowLineBlue = new System.Windows.Forms.CheckBox();
+            this.checkBoxLockDelta = new System.Windows.Forms.CheckBox();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxShowLineRed = new System.Windows.Forms.CheckBox();
             this.buttonCopyToClipboardRed = new System.Windows.Forms.Button();
@@ -46,20 +47,33 @@ namespace Protractor
             this.statusToolStrip = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolSetBlueAngle = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleBlue0 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleBlue30 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleBlue45 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleBlue60 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleBlue90 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleBlue120 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleBlue180 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleBlue270 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorBlue = new System.Windows.Forms.ToolStripSeparator();
+            this.toolSetAngleBlueArbitrary = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetRedAngle = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleRed0 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleRed30 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleRed45 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleRed60 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleRed90 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSetAngleRed120 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleRed180 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSetAngleRed270 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorRed = new System.Windows.Forms.ToolStripSeparator();
+            this.toolSetAngleRedArbitrary = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuToolAngular = new System.Windows.Forms.ToolStripMenuItem();
             this.menuToolDecimal = new System.Windows.Forms.ToolStripMenuItem();
             this.statusLabelBlue = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabelRed = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabelDelta = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -104,7 +118,7 @@ namespace Protractor
             this.checkBoxAlwaysOnTop.Size = new System.Drawing.Size(20, 20);
             this.checkBoxAlwaysOnTop.TabIndex = 3;
             this.checkBoxAlwaysOnTop.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxAlwaysOnTop, "Toggle \u0022Always on top\u0022 mode (T)");
+            this.toolTipMain.SetToolTip(this.checkBoxAlwaysOnTop, "Toggle \"Always on top\" mode (T)");
             this.checkBoxAlwaysOnTop.UseVisualStyleBackColor = true;
             this.checkBoxAlwaysOnTop.CheckedChanged += new System.EventHandler(this.checkBoxAlwaysOnTop_CheckedChanged);
             // 
@@ -133,9 +147,25 @@ namespace Protractor
             this.checkBoxShowLineBlue.Size = new System.Drawing.Size(20, 20);
             this.checkBoxShowLineBlue.TabIndex = 4;
             this.checkBoxShowLineBlue.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxShowLineBlue, "Show/hide the Blue support line (1):\r\n – Press LMB on the form to draw the line \r\n – Hold" + " LMB on the form and move the cursor to change the angle");
+            this.toolTipMain.SetToolTip(this.checkBoxShowLineBlue, "Show/hide the Blue support line (1):\r\n – Press LMB on the form to draw the line \r" + "\n – Hold LMB on the form and move the cursor to change the angle");
             this.checkBoxShowLineBlue.UseVisualStyleBackColor = true;
             this.checkBoxShowLineBlue.CheckedChanged += new System.EventHandler(this.checkBoxShowLineBlue_CheckedChanged);
+            // 
+            // checkBoxLockDelta
+            // 
+            this.checkBoxLockDelta.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxLockDelta.FlatAppearance.BorderSize = 0;
+            this.checkBoxLockDelta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxLockDelta.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.checkBoxLockDelta.Image = ((System.Drawing.Image) (resources.GetObject("checkBoxLockDelta.Image")));
+            this.checkBoxLockDelta.Location = new System.Drawing.Point(55, 127);
+            this.checkBoxLockDelta.Name = "checkBoxLockDelta";
+            this.checkBoxLockDelta.Size = new System.Drawing.Size(20, 20);
+            this.checkBoxLockDelta.TabIndex = 4;
+            this.checkBoxLockDelta.TabStop = false;
+            this.toolTipMain.SetToolTip(this.checkBoxLockDelta, "Toggle \"Lock Delta angle\" mode (L)");
+            this.checkBoxLockDelta.UseVisualStyleBackColor = true;
+            this.checkBoxLockDelta.CheckedChanged += new System.EventHandler(this.checkBoxLockDelta_CheckedChanged);
             // 
             // toolTipMain
             // 
@@ -156,7 +186,7 @@ namespace Protractor
             this.checkBoxShowLineRed.Size = new System.Drawing.Size(20, 20);
             this.checkBoxShowLineRed.TabIndex = 4;
             this.checkBoxShowLineRed.TabStop = false;
-            this.toolTipMain.SetToolTip(this.checkBoxShowLineRed, "Show/hide the Red support line (2):\r\n – Press RMB on the form to draw the line \r\n – Hold " + "RMB on the form and move the cursor to change the angle");
+            this.toolTipMain.SetToolTip(this.checkBoxShowLineRed, "Show/hide the Red support line (2):\r\n – Press RMB on the form to draw the line \r\n" + " – Hold RMB on the form and move the cursor to change the angle");
             this.checkBoxShowLineRed.UseVisualStyleBackColor = true;
             this.checkBoxShowLineRed.CheckedChanged += new System.EventHandler(this.checkBoxShowLineRed_CheckedChanged);
             // 
@@ -228,7 +258,7 @@ namespace Protractor
             // 
             // toolSetBlueAngle
             // 
-            this.toolSetBlueAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleBlue0, this.toolSetAngleBlue90, this.toolSetAngleBlue180, this.toolSetAngleBlue270});
+            this.toolSetBlueAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleBlue0, this.toolSetAngleBlue30, this.toolSetAngleBlue45, this.toolSetAngleBlue60, this.toolSetAngleBlue90, this.toolSetAngleBlue120, this.toolSetAngleBlue180, this.toolSetAngleBlue270, this.toolStripSeparatorBlue, this.toolSetAngleBlueArbitrary});
             this.toolSetBlueAngle.Enabled = false;
             this.toolSetBlueAngle.Name = "toolSetBlueAngle";
             this.toolSetBlueAngle.Size = new System.Drawing.Size(218, 26);
@@ -237,34 +267,74 @@ namespace Protractor
             // toolSetAngleBlue0
             // 
             this.toolSetAngleBlue0.Name = "toolSetAngleBlue0";
-            this.toolSetAngleBlue0.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleBlue0.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleBlue0.Text = "0°";
             this.toolSetAngleBlue0.Click += new System.EventHandler(this.toolSetAngleBlue0_Click);
+            // 
+            // toolSetAngleBlue30
+            // 
+            this.toolSetAngleBlue30.Name = "toolSetAngleBlue30";
+            this.toolSetAngleBlue30.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleBlue30.Text = "30°";
+            this.toolSetAngleBlue30.Click += new System.EventHandler(this.toolSetAngleBlue30_Click);
+            // 
+            // toolSetAngleBlue45
+            // 
+            this.toolSetAngleBlue45.Name = "toolSetAngleBlue45";
+            this.toolSetAngleBlue45.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleBlue45.Text = "45°";
+            this.toolSetAngleBlue45.Click += new System.EventHandler(this.toolSetAngleBlue45_Click);
+            // 
+            // toolSetAngleBlue60
+            // 
+            this.toolSetAngleBlue60.Name = "toolSetAngleBlue60";
+            this.toolSetAngleBlue60.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleBlue60.Text = "60°";
+            this.toolSetAngleBlue60.Click += new System.EventHandler(this.toolSetAngleBlue60_Click);
             // 
             // toolSetAngleBlue90
             // 
             this.toolSetAngleBlue90.Name = "toolSetAngleBlue90";
-            this.toolSetAngleBlue90.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleBlue90.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleBlue90.Text = "90°";
             this.toolSetAngleBlue90.Click += new System.EventHandler(this.toolSetAngleBlue90_Click);
+            // 
+            // toolSetAngleBlue120
+            // 
+            this.toolSetAngleBlue120.Name = "toolSetAngleBlue120";
+            this.toolSetAngleBlue120.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleBlue120.Text = "120°";
+            this.toolSetAngleBlue120.Click += new System.EventHandler(this.toolSetAngleBlue120_Click);
             // 
             // toolSetAngleBlue180
             // 
             this.toolSetAngleBlue180.Name = "toolSetAngleBlue180";
-            this.toolSetAngleBlue180.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleBlue180.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleBlue180.Text = "180°";
             this.toolSetAngleBlue180.Click += new System.EventHandler(this.toolSetAngleBlue180_Click);
             // 
             // toolSetAngleBlue270
             // 
             this.toolSetAngleBlue270.Name = "toolSetAngleBlue270";
-            this.toolSetAngleBlue270.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleBlue270.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleBlue270.Text = "270°";
             this.toolSetAngleBlue270.Click += new System.EventHandler(this.toolSetAngleBlue270_Click);
             // 
+            // toolStripSeparatorBlue
+            // 
+            this.toolStripSeparatorBlue.Name = "toolStripSeparatorBlue";
+            this.toolStripSeparatorBlue.Size = new System.Drawing.Size(216, 6);
+            // 
+            // toolSetAngleBlueArbitrary
+            // 
+            this.toolSetAngleBlueArbitrary.Name = "toolSetAngleBlueArbitrary";
+            this.toolSetAngleBlueArbitrary.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleBlueArbitrary.Text = "Arbitrary... (Ctrl + 1)";
+            this.toolSetAngleBlueArbitrary.Click += new System.EventHandler(this.toolSetAngleBlueArbitrary_Click);
+            // 
             // toolSetRedAngle
             // 
-            this.toolSetRedAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleRed0, this.toolSetAngleRed90, this.toolSetAngleRed180, this.toolSetAngleRed270});
+            this.toolSetRedAngle.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolSetAngleRed0, this.toolSetAngleRed30, this.toolSetAngleRed45, this.toolSetAngleRed60, this.toolSetAngleRed90, this.toolSetAngleRed120, this.toolSetAngleRed180, this.toolSetAngleRed270, this.toolStripSeparatorRed, this.toolSetAngleRedArbitrary});
             this.toolSetRedAngle.Enabled = false;
             this.toolSetRedAngle.Name = "toolSetRedAngle";
             this.toolSetRedAngle.Size = new System.Drawing.Size(218, 26);
@@ -273,30 +343,70 @@ namespace Protractor
             // toolSetAngleRed0
             // 
             this.toolSetAngleRed0.Name = "toolSetAngleRed0";
-            this.toolSetAngleRed0.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleRed0.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleRed0.Text = "0°";
             this.toolSetAngleRed0.Click += new System.EventHandler(this.toolSetAngleRed0_Click);
+            // 
+            // toolSetAngleRed30
+            // 
+            this.toolSetAngleRed30.Name = "toolSetAngleRed30";
+            this.toolSetAngleRed30.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleRed30.Text = "30°";
+            this.toolSetAngleRed30.Click += new System.EventHandler(this.toolSetAngleRed30_Click);
+            // 
+            // toolSetAngleRed45
+            // 
+            this.toolSetAngleRed45.Name = "toolSetAngleRed45";
+            this.toolSetAngleRed45.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleRed45.Text = "45°";
+            this.toolSetAngleRed45.Click += new System.EventHandler(this.toolSetAngleRed45_Click);
+            // 
+            // toolSetAngleRed60
+            // 
+            this.toolSetAngleRed60.Name = "toolSetAngleRed60";
+            this.toolSetAngleRed60.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleRed60.Text = "60°";
+            this.toolSetAngleRed60.Click += new System.EventHandler(this.toolSetAngleRed60_Click);
             // 
             // toolSetAngleRed90
             // 
             this.toolSetAngleRed90.Name = "toolSetAngleRed90";
-            this.toolSetAngleRed90.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleRed90.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleRed90.Text = "90°";
             this.toolSetAngleRed90.Click += new System.EventHandler(this.toolSetAngleRed90_Click);
+            // 
+            // toolSetAngleRed120
+            // 
+            this.toolSetAngleRed120.Name = "toolSetAngleRed120";
+            this.toolSetAngleRed120.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleRed120.Text = "120°";
+            this.toolSetAngleRed120.Click += new System.EventHandler(this.toolSetAngleRed120_Click);
             // 
             // toolSetAngleRed180
             // 
             this.toolSetAngleRed180.Name = "toolSetAngleRed180";
-            this.toolSetAngleRed180.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleRed180.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleRed180.Text = "180°";
             this.toolSetAngleRed180.Click += new System.EventHandler(this.toolSetAngleRed180_Click);
             // 
             // toolSetAngleRed270
             // 
             this.toolSetAngleRed270.Name = "toolSetAngleRed270";
-            this.toolSetAngleRed270.Size = new System.Drawing.Size(113, 26);
+            this.toolSetAngleRed270.Size = new System.Drawing.Size(219, 26);
             this.toolSetAngleRed270.Text = "270°";
             this.toolSetAngleRed270.Click += new System.EventHandler(this.toolSetAngleRed270_Click);
+            // 
+            // toolStripSeparatorRed
+            // 
+            this.toolStripSeparatorRed.Name = "toolStripSeparatorRed";
+            this.toolStripSeparatorRed.Size = new System.Drawing.Size(216, 6);
+            // 
+            // toolSetAngleRedArbitrary
+            // 
+            this.toolSetAngleRedArbitrary.Name = "toolSetAngleRedArbitrary";
+            this.toolSetAngleRedArbitrary.Size = new System.Drawing.Size(219, 26);
+            this.toolSetAngleRedArbitrary.Text = "Arbitrary... (Ctrl + 2)";
+            this.toolSetAngleRedArbitrary.Click += new System.EventHandler(this.toolSetAngleRedArbitrary_Click);
             // 
             // toolStripSeparator1
             // 
@@ -341,10 +451,25 @@ namespace Protractor
             this.statusLabelDelta.Size = new System.Drawing.Size(41, 22);
             this.statusLabelDelta.Text = "Delta";
             // 
+            // buttonHelp
+            // 
+            this.buttonHelp.FlatAppearance.BorderSize = 0;
+            this.buttonHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonHelp.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.buttonHelp.Image = ((System.Drawing.Image) (resources.GetObject("buttonHelp.Image")));
+            this.buttonHelp.Location = new System.Drawing.Point(81, 153);
+            this.buttonHelp.Name = "buttonHelp";
+            this.buttonHelp.Size = new System.Drawing.Size(20, 20);
+            this.buttonHelp.TabIndex = 9;
+            this.buttonHelp.TabStop = false;
+            this.buttonHelp.UseVisualStyleBackColor = true;
+            this.buttonHelp.Click += new System.EventHandler(this.buttonHelp_Click);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(350, 323);
+            this.Controls.Add(this.buttonHelp);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.buttonCopyToClipboardDelta);
             this.Controls.Add(this.buttonCopyToClipboardRed);
@@ -354,6 +479,7 @@ namespace Protractor
             this.Controls.Add(this.checkBoxShowLineRed);
             this.Controls.Add(this.checkBoxShowLineBlue);
             this.Controls.Add(this.checkBoxAlwaysOnTop);
+            this.Controls.Add(this.checkBoxLockDelta);
             this.Controls.Add(this.pictureBox);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -361,9 +487,9 @@ namespace Protractor
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Opacity = 0.9D;
-            this.Text = "Protractor 1.1 (press F1 for help)";
-            this.PreviewKeyDown +=new PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
+            this.Text = "Protractor 1.2";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -374,9 +500,11 @@ namespace Protractor
         private System.Windows.Forms.Button buttonCopyToClipboardBlue;
         private System.Windows.Forms.Button buttonCopyToClipboardDelta;
         private System.Windows.Forms.Button buttonCopyToClipboardRed;
+        private System.Windows.Forms.Button buttonHelp;
         private System.Windows.Forms.Button buttonOpacityDecrease;
         private System.Windows.Forms.Button buttonOpacityIncrease;
         private System.Windows.Forms.CheckBox checkBoxAlwaysOnTop;
+        private System.Windows.Forms.CheckBox checkBoxLockDelta;
         private System.Windows.Forms.CheckBox checkBoxShowLineBlue;
         private System.Windows.Forms.CheckBox checkBoxShowLineRed;
         private System.Windows.Forms.ToolStripMenuItem menuToolAngular;
@@ -388,16 +516,28 @@ namespace Protractor
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripDropDownButton statusToolStrip;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue0;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue120;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue180;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue270;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue30;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue45;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue60;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlue90;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleBlueArbitrary;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed0;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed120;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed180;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed270;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed30;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed45;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed60;
         private System.Windows.Forms.ToolStripMenuItem toolSetAngleRed90;
+        private System.Windows.Forms.ToolStripMenuItem toolSetAngleRedArbitrary;
         private System.Windows.Forms.ToolStripMenuItem toolSetBlueAngle;
         private System.Windows.Forms.ToolStripMenuItem toolSetRedAngle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorBlue;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorRed;
         private System.Windows.Forms.ToolTip toolTipMain;
 
         #endregion

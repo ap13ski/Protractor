@@ -23,11 +23,14 @@ namespace Protractor
         */
         private Graphics graphics;
 
+        // Standard length of support vector for current grid
+        private const double LENGTH_VISUAL = 205;
+
         // The object v1 represents the blue line.
-        private Vector v1 = new Vector(0, 0, 205, 0, 1);
+        private Vector v1 = new Vector(0, 0, LENGTH_VISUAL, 0, 1);
 
         // The object v2 represents the red line.
-        private Vector v2 = new Vector(0, 0, 205, 0, 1);
+        private Vector v2 = new Vector(0, 0, LENGTH_VISUAL, 0, 1);
 
         // Represents left mouse button (LMB) pressed state.
         // Variable is used to define a new position of vectors v1
@@ -50,6 +53,13 @@ namespace Protractor
         // Represents the status of the associated properties
         // menuToolAngular.Checked and menuToolDecimal.Checked
         private bool isAngleInDegrees = true;
+
+        private bool isDeltaAngleLocked = false;
+
+        private Pen pen_darkblue = new Pen(Color.DarkBlue); //Pen(Color.FromArgb(16, 93, 163));
+        private Pen pen_blue = new Pen(Color.Blue); //Pen(Color.FromArgb(22, 103, 183));
+        private Pen pen_darkred = new Pen(Color.DarkRed); //Pen(Color.FromArgb(190, 0, 0));
+        private Pen pen_red = new Pen(Color.Red); //Pen(Color.FromArgb(200, 0, 0));
 
         public Form1()
         {
@@ -77,7 +87,7 @@ namespace Protractor
         private void ShowLines()
         {
             SetVectorAngle(v1, 60);
-            SetVectorAngle(v2, 30);
+            SetVectorAngle(v2, 45);
             checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
             checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
         }
@@ -103,9 +113,9 @@ namespace Protractor
         */
         private void UpdateTooltipAngles()
         {
-            string str_blue = string.Format("Blue angle value: {0}\nCopy to the clipboard (X)", GetAngleValueVector(v1, 12));
-            string str_red = string.Format("Red angle value: {0}\nCopy to the clipboard (C)", GetAngleValueVector(v2, 12));
-            string str_delta = string.Format("Delta angle value: {0}\nCopy to the clipboard (V)", GetAngleValueDelta(v1, v2, 12));
+            string str_blue = string.Format("Blue angle value: {0}\nCopy to the clipboard (X)", GetAngleValueVectorString(v1, 12));
+            string str_red = string.Format("Red angle value: {0}\nCopy to the clipboard (C)", GetAngleValueVectorString(v2, 12));
+            string str_delta = string.Format("Delta angle value: {0}\nCopy to the clipboard (V)", GetAngleValueDeltaString(v1, v2, 12));
             
             toolTipMain.SetToolTip(buttonCopyToClipboardBlue, str_blue);
             toolTipMain.SetToolTip(buttonCopyToClipboardRed, str_red);
@@ -134,16 +144,16 @@ namespace Protractor
 
             if (isBlueLine && !isRedLine)
             {
-                DrawLine(v1, Pens.DarkBlue, Pens.Blue);
+                DrawLine(v1, pen_darkblue, pen_blue);
             }
             else if (isRedLine && !isBlueLine)
             {
-                DrawLine(v2, Pens.DarkRed, Pens.Red);
+                DrawLine(v2, pen_darkred, pen_red);
             }
             else if (isBlueLine && isRedLine)
             {
-                DrawLine(v1, Pens.DarkBlue, Pens.Blue);
-                DrawLine(v2, Pens.DarkRed, Pens.Red);
+                DrawLine(v1, pen_darkblue, pen_blue);
+                DrawLine(v2, pen_darkred, pen_red);
             }
 
             UpdateTooltipAngles();
@@ -185,9 +195,9 @@ namespace Protractor
         */
         private void UpdateLabelAngles()
         {
-            string str_blue = string.Format("Blue: {0}", GetAngleValueVector(v1, 6));
-            string str_red = string.Format("Red: {0}", GetAngleValueVector(v2, 6));
-            string str_delta = string.Format("Delta: {0}", GetAngleValueDelta(v1, v2, 6));
+            string str_blue = string.Format("Blue: {0}", GetAngleValueVectorString(v1, 6));
+            string str_red = string.Format("Red: {0}", GetAngleValueVectorString(v2, 6));
+            string str_delta = string.Format("Delta: {0}", GetAngleValueDeltaString(v1, v2, 6));
             
             if (isBlueLine && !isRedLine)
             {
@@ -237,14 +247,14 @@ namespace Protractor
         // to the clipboard.
         private void CopyToClipboardVector(Vector vector)
         {
-            Clipboard.SetText(GetAngleValueVector(vector, 12));
+            Clipboard.SetText(GetAngleValueVectorString(vector, 12));
         }
 
         // Copies the value of the minimum difference of vectors' angles
         // transmitted as parameters to the clipboard.
         private void CopyToClipboardDelta(Vector vector1, Vector vector2)
         {
-            Clipboard.SetText(GetAngleValueDelta(vector1, vector2, 12));
+            Clipboard.SetText(GetAngleValueDeltaString(vector1, vector2, 12));
         }
 
         // Event handler for clicking the form opacity increase button.
@@ -280,6 +290,11 @@ namespace Protractor
             CopyToClipboardDelta(v1, v2);
         }
 
+        private void buttonHelp_Click(object sender, EventArgs e)
+        {
+            ShowHelp();
+        }
+
         // The checkbox state change event handler that changes 
         // the form visibility always on top of all windows property.
         private void checkBoxAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
@@ -289,7 +304,6 @@ namespace Protractor
             else
                 { TopMost = false; }
         }
-
 
         private void ShowLineBlue()
         {
@@ -312,7 +326,6 @@ namespace Protractor
             RedrawLines();
         }
 
-
         /*
         Event handler of changing checkbox state. Switches visibility
         of the blue line and redraws all the lines depending on the
@@ -322,7 +335,6 @@ namespace Protractor
         {
             ShowLineBlue();
         }
-
 
         private void ShowLineRed()
         {
@@ -356,6 +368,17 @@ namespace Protractor
         {
             ShowLineRed();
         }
+        
+        private void checkBoxLockDelta_CheckedChanged(object sender, EventArgs e)
+        {
+            ToggleLockDelta();
+        }
+        
+        private void ToggleLockDelta()
+        {
+            isDeltaAngleLocked = !isDeltaAngleLocked;
+            UpdateLabelAngles();
+        }
 
         /*
         Returns as a string the angle value in angular units:
@@ -364,12 +387,12 @@ namespace Protractor
         */
         private string ConvertAngleToDegrees(double a)
         {
-            double integerpart = Math.Truncate(a);
-            double decimalpart = a - Math.Truncate(a);
-            double m = Math.Truncate(decimalpart * 60);
-            double s = Math.Truncate(decimalpart * 3600) - Math.Truncate(m) * 60;
-            
-            string str_result = string.Format("{0}\u00b0 {1}' {2}\u0022", integerpart, m, s);// \u0022 - Unicode symbol "
+            double part_integer = Math.Truncate(a);
+            double part_decimal = a - Math.Truncate(a);
+            double m = Math.Truncate(part_decimal * 60);
+            double s = Math.Truncate(part_decimal * 3600) - Math.Truncate(m) * 60;
+
+            string str_result = string.Format("{0}\u00b0 {1}' {2}\u0022", part_integer, m, s);// \u0022 - Unicode symbol "
             
             return str_result;    
         }
@@ -381,14 +404,14 @@ namespace Protractor
         The parameter r sets the number of fractional digits in the 
         return value.
         */
-        private string GetAngleValueVector(Vector vector, byte r)
+        private string GetAngleValueVectorString(Vector vector, int digits)
         {
             string str_result;
-            
+
             if (isAngleInDegrees)
                 { str_result = string.Format("{0}", ConvertAngleToDegrees(vector.A)); }
             else
-                { str_result = string.Format("{0}\u00b0", Convert.ToString(Math.Round(vector.A, r))); }
+                { str_result = string.Format("{0}\u00b0", Convert.ToString(Math.Round(vector.A, digits))); }
             
             return str_result;
         }
@@ -400,14 +423,18 @@ namespace Protractor
         The parameter r sets the number of fractional digits in the 
         return value.
         */
-        private string GetAngleValueDelta(Vector vector1, Vector vector2, byte r)
+        private string GetAngleValueDeltaString(Vector vector1, Vector vector2, int digits)
         {
             string str_result;
             
+            string str_locked = "";
+            if (isDeltaAngleLocked)
+                { str_locked = "[L]"; }
+            
             if (isAngleInDegrees)
-            { str_result = string.Format("{0}", ConvertAngleToDegrees(AverageAngleMin(vector1.A, vector2.A, r))); }
+                { str_result = string.Format("{0} {1}", ConvertAngleToDegrees(AverageAngleMin(vector1.A, vector2.A, digits)), str_locked); }
             else
-            { str_result = string.Format("{0}\u00b0", AverageAngleMin(vector1.A, vector2.A, r)); }
+                { str_result = string.Format("{0}\u00b0 {1}", AverageAngleMin(vector1.A, vector2.A, digits), str_locked); }
             
             return str_result;
         }
@@ -507,20 +534,31 @@ namespace Protractor
         // Combined method to updates vector's state and redraw the lines.
         private void RefreshVector(Vector vector, object sender, MouseEventArgs e)
         {
-            UpdateVector(vector, sender, e);
+            UpdateVectors(vector, sender, e);
             RedrawLines();
         }
 
         // Gets a vector as a parameter and updates its state depending on
         // the cursor coordinates. Uses an object e as a mouse event handler.
-        private void UpdateVector(Vector vector, object sender, MouseEventArgs e)
+        private void UpdateVectors(Vector vector_base, object sender, MouseEventArgs e)
         {
-            int new_x = ((e.X) - pictureBox.Width / 2);   // New X-coordinate
-            int new_y = -((e.Y) - pictureBox.Height / 2); // New Y-coordinate
-            double new_angle = Vector.GetAngleByPoints(0, 0, new_x, new_y); // New angle
-            double m = 205; // Standard length of support vector for current grid
+            int new_x = ((e.X) - pictureBox.Width / 2);
+            int new_y = -((e.Y) - pictureBox.Height / 2);
+            double new_angle = Vector.GetAngleByPoints(0, 0, new_x, new_y);
 
-            vector.SetVectorByAngle(0, 0, m, new_angle);
+            if (isDeltaAngleLocked == true)
+            {
+                double old_angle = vector_base.A;
+                double diff_angle = new_angle - old_angle;
+
+                if (vector_base == v1)
+                    { v2.SetVectorByAngle(0, 0, LENGTH_VISUAL, RecalculateAngle(v2.A + diff_angle)); }
+
+                if (vector_base == v2)
+                    { v1.SetVectorByAngle(0, 0, LENGTH_VISUAL, RecalculateAngle(v1.A + diff_angle)); }
+            }
+
+            vector_base.SetVectorByAngle(0, 0, LENGTH_VISUAL, RecalculateAngle(new_angle));
         }
 
         /*
@@ -553,10 +591,11 @@ namespace Protractor
 
         private void ShowHelp()
         {
-            string msg_text = "Protractor 1.1 64-bit\n" +
+            string msg_text = "Protractor 1.2 64-bit\n" +
                               "Created by ap13ski\n" +
                               "https://github.com/ap13ski\n" +
-                              "ap13ski@gmail.com\n\n\n" +
+                              "ap13ski@gmail.com\n" +
+                              "Special thanks to Eduardo Steffler Werner.\n\n\n" +
                               "Press [F1] to show this information window.\n\n" +
                               "Activate the Blue support line (BSL) and/or the Red support line (RSL)" +
                               " using their corresponding switches in the lower-left corner" +
@@ -566,12 +605,15 @@ namespace Protractor
                               " anywhere in the window. For greater precision, you can release" +
                               " the mouse button *anywhere* on the screen, including the area outside" +
                               " the window.\n\n" +
+                              "Use the switch in the lower-left corner or press [L] to toggle the \u0022Lock" +
+                              " Delta Angle\u0022 mode.\n\n" +
                               "Adjust the window opacity using the mouse wheel. Press [T] to toggle" +
                               " \u0022Always on top\u0022 mode.\n\nUse the gear icon button" +
                               " on the status bar or press [U] to toggle the angle value units." +
                               " Press [A] to set angular units (d\u00b0 m' s\u0022), press [D] to set" +
                               " decimal units (d,nnn\u00b0). This menu also allows you to set" +
-                              " fixed angle values of the support lines.\n\n" +
+                              " fixed angle values of the support lines.\n" +
+                              "To set an arbitrary angle value, press [Ctrl+1] or [Ctrl+2].\n\n" +
                               "Copy the angle values using the buttons in the lower-left corner of the window," +
                               " located below the BSL and the RSL switches, or with [X], [C], [V].\n\n" +
                               "Move the window with the arrow keys [\u2191], [\u2193], [\u2190], [\u2192] by 1 px." +
@@ -658,6 +700,12 @@ namespace Protractor
                 CopyToClipboardDelta(v1, v2);
                 e.Handled = true;
             }
+            
+            if (e.KeyCode == Keys.L)
+            {
+                checkBoxLockDelta.Checked = !checkBoxLockDelta.Checked;
+                e.Handled = true;
+            }
 
             if (e.KeyCode == Keys.F1)
             {
@@ -692,15 +740,27 @@ namespace Protractor
                 e.Handled = true;
             }
 
-            if (e.KeyCode == Keys.D1)
+            if (e.KeyCode == Keys.D1 && !e.Control)
             {
                 checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
                 e.Handled = true;
             }
             
-            if (e.KeyCode == Keys.D2)
+            if (e.KeyCode == Keys.D2 && !e.Control)
             {
                 checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D1 && e.Control)
+            {
+                SetAngleArbitrary(sender, e, "BLUE");
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D2 && e.Control)
+            {
+                SetAngleArbitrary(sender, e, "RED");
                 e.Handled = true;
             }
             
@@ -728,7 +788,7 @@ namespace Protractor
         a1 and a2 corners. The parameter r sets the number of fractional
         digits in the return value.
         */
-        private double AverageAngleMin(double a1, double a2, byte r)
+        private double AverageAngleMin(double a1, double a2, int r)
         {
             double delta = Math.Round(Math.Abs(a1 - a2), r);
             
@@ -736,6 +796,26 @@ namespace Protractor
                 { return 360 - delta; }
             else 
                 { return delta; }
+        }
+
+        private double RecalculateAngle(double angle)
+        {
+            if (angle > 360)
+                { return angle - 360; }
+            if (angle < 0)
+                { return angle + 360; }
+
+            return angle;
+        }
+        
+        private double GetAngleValueDelta(Vector v1, Vector v2)
+        {
+            double delta = Math.Abs(v1.A - v2.A);
+
+            if (v1.A >= v2.A)
+                { return delta; }
+            else
+                { return -delta;}
         }
 
         /*
@@ -796,23 +876,75 @@ namespace Protractor
         // After that redraws the lines.
         private void SetVectorAngle(Vector vector, double angle)
         {
-            vector.SetVectorByAngle(0, 0, 205, angle);
+            double delta = GetAngleValueDelta(v1, v2);
+            
+            vector.SetVectorByAngle(0, 0, LENGTH_VISUAL, angle);
+            
+            if (isDeltaAngleLocked == true)
+            {
+                if (vector == v1)
+                    { v2.SetVectorByAngle(0, 0, LENGTH_VISUAL, RecalculateAngle(angle - delta)); }
+                
+                if (vector == v2)
+                    { v1.SetVectorByAngle(0, 0, LENGTH_VISUAL, RecalculateAngle(angle + delta)); }
+            }
+            
             RedrawLines();
+        }
+        
+        private void SetAngleArbitrary(object sender, EventArgs e, string color)
+        {
+            string title = "Arbitrary angle value";
+            string prompt = string.Format("Enter the {0} angle value:", color);
+            double default_value = 0.0;
+            
+            using (var dialog = new InputDialog(title, prompt, default_value))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (color == "BLUE")
+                    {
+                        SetVectorAngle(v1, dialog.Value);
+                    }
+                    if (color == "RED")
+                    {
+                        SetVectorAngle(v2, dialog.Value);
+                    }
+                }
+            }
         }
 
         // The group of event handlers to select one of the fixed
         // angle values of vector v1 in the statusToolStrip component.
         private void toolSetAngleBlue0_Click(object sender, EventArgs e) { SetVectorAngle(v1, 0); }
+        private void toolSetAngleBlue30_Click(object sender, EventArgs e) { SetVectorAngle(v1, 30); }
+        private void toolSetAngleBlue45_Click(object sender, EventArgs e) { SetVectorAngle(v1, 45); }
+        private void toolSetAngleBlue60_Click(object sender, EventArgs e) { SetVectorAngle(v1, 60); }
         private void toolSetAngleBlue90_Click(object sender, EventArgs e) { SetVectorAngle(v1, 90); }
+        private void toolSetAngleBlue120_Click(object sender, EventArgs e) { SetVectorAngle(v1, 120); }
         private void toolSetAngleBlue180_Click(object sender, EventArgs e) { SetVectorAngle(v1, 180); }
         private void toolSetAngleBlue270_Click(object sender, EventArgs e) { SetVectorAngle(v1, 270); }
+
+        private void toolSetAngleBlueArbitrary_Click(object sender, EventArgs e)
+        {
+            SetAngleArbitrary(sender, e, "BLUE");
+        }
 
         // The group of event handlers to select one of the fixed
         // angle values of vector v2 in the statusToolStrip component.
         private void toolSetAngleRed0_Click(object sender, EventArgs e) { SetVectorAngle(v2, 0); }
+        private void toolSetAngleRed30_Click(object sender, EventArgs e) { SetVectorAngle(v2, 30); }
+        private void toolSetAngleRed45_Click(object sender, EventArgs e) { SetVectorAngle(v2, 45); }
+        private void toolSetAngleRed60_Click(object sender, EventArgs e) { SetVectorAngle(v2, 60); }
         private void toolSetAngleRed90_Click(object sender, EventArgs e) { SetVectorAngle(v2, 90); }
+        private void toolSetAngleRed120_Click(object sender, EventArgs e) { SetVectorAngle(v2, 120); }
         private void toolSetAngleRed180_Click(object sender, EventArgs e) { SetVectorAngle(v2, 180); }
         private void toolSetAngleRed270_Click(object sender, EventArgs e) { SetVectorAngle(v2, 270); }
+
+        private void toolSetAngleRedArbitrary_Click(object sender, EventArgs e)
+        {
+            SetAngleArbitrary(sender, e, "RED");
+        }
 
         /*
         To avoid incorrect scaling of components on the form 
@@ -832,13 +964,17 @@ namespace Protractor
 
             // top left block
             buttonOpacityIncrease.Size = new System.Drawing.Size(30, 30);
-            buttonOpacityIncrease.Location = new System.Drawing.Point(4, 4);
+            buttonOpacityIncrease.Location = new System.Drawing.Point(72, 4);
 
             buttonOpacityDecrease.Size = new System.Drawing.Size(30, 30);
             buttonOpacityDecrease.Location = new System.Drawing.Point(38, 4);
 
-            checkBoxAlwaysOnTop.Location = new System.Drawing.Point(72, 4);
             checkBoxAlwaysOnTop.Size = new System.Drawing.Size(30, 30);
+            checkBoxAlwaysOnTop.Location = new System.Drawing.Point(4, 4);
+            
+            buttonHelp.Size = new System.Drawing.Size(30, 30);
+            //buttonHelp.Location = new System.Drawing.Point(4, 38);
+            buttonHelp.Location = new System.Drawing.Point(466, 4);
 
             // bottom left block
             buttonCopyToClipboardBlue.Size = new System.Drawing.Size(30, 30);
@@ -850,11 +986,15 @@ namespace Protractor
             buttonCopyToClipboardDelta.Size = new System.Drawing.Size(30, 30);
             buttonCopyToClipboardDelta.Location = new System.Drawing.Point(72, 468);
 
+            checkBoxLockDelta.Location = new System.Drawing.Point(4, 400);
+            checkBoxLockDelta.Size = new System.Drawing.Size(30, 30);
+            
             checkBoxShowLineBlue.Location = new System.Drawing.Point(4, 434);
             checkBoxShowLineBlue.Size = new System.Drawing.Size(30, 30);
 
             checkBoxShowLineRed.Location = new System.Drawing.Point(38, 434);
             checkBoxShowLineRed.Size = new System.Drawing.Size(30, 30);
+            
 
             // bottom block
             statusLabelBlue.Font = new System.Drawing.Font("Tahoma", 10F);
