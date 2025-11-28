@@ -2,7 +2,7 @@
 This application measures angles between objects relative to the origin
 of the angular grid. It uses the Graphics.DrawLine() method from the
 System.Drawing namespace for rendering support vector lines.
-Vector math operations are implemented in the Vector class (Vector.cs file).
+Vector math operations are implemented in the Vector class (VectorLibrary.cs).
 */
 
 using System;
