@@ -1,4 +1,4 @@
-# Protractor
+# Protractor 1.2.1
 
 A simple C# (Windows Forms) application for measuring angles between any objects on the screen.
 
@@ -18,7 +18,7 @@ How to get started using Protractor:
 - [x] Adjust the window opacity using the mouse wheel. Press **[T]** to toggle **Always on top** mode.
 - [x] Use the gear icon button on the status bar or press **[U]** to toggle the angle value units. Press **[A]** to set angular units (d° m' s"), press **[D]** to set decimal units (d,nnn°). This menu also allows you to set fixed angle values of the support lines. To set an arbitrary angle value, press **[Ctrl+1]** or **[Ctrl+2]**.
 - [x] Copy the angle values using the buttons in the lower-left corner of the window, located below the BSL and the RSL switches, or with **[X]**, **[C]**, **[V]**.
-- [x] Move the window with the arrow keys **[↑]**, **[↓]**, **[←]**, **[→]** by 1 px. Hold **[Ctrl]** or **[Alt]** to move the window by 10 px or 50 px, respectively. Press **[Home]** to center the window on the screen.
+- [x] Move the window with the arrow keys **[↑]**, **[↓]**, **[←]**, **[→]** by **1**px. Hold **[Ctrl]** or **[Alt]** to move the window by **10**px or **50**px, respectively. Press **[Home]** to center the window on the screen.
 
 
 Hope you enjoy Protractor!
