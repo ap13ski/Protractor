@@ -8,12 +8,19 @@ Vector math operations are implemented in the Vector class (VectorLibrary.cs).
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics; // Stopwatch
 using VectorLibrary;
 
 namespace Protractor
 {
     public partial class FormMain : Form
     {
+        // System timers to throttle redraw operations during mouse movement
+        // in pictureBox_MouseMove().
+        private const double DELAY_TIME = 5.0; // 5 ms, ~200 fps
+        private Stopwatch mouse_stopwatch = Stopwatch.StartNew();
+        private readonly long mouse_update_ticks = TimeSpan.FromMilliseconds(DELAY_TIME).Ticks;
+        
         // The graphics object is used with DrawLine() to render
         // the current state of support vectors v1 and v2.
         private Graphics graphics;
@@ -78,6 +85,7 @@ namespace Protractor
             SetFormProperties();
 
             ShowLines();
+            ToggleAngular();
 
             UpdateTooltipOpacity();
             UpdateTooltipAngles();
@@ -106,21 +114,22 @@ namespace Protractor
         // the coordinate origin, accounting for the 500x500 form size where
         // the true origin is between pixels.
         // Converts vector coordinates to pictureBox coordinates, as
-        // the control's origin (0,0) is at the top-left corner.
-        private void DrawLine(Vector v, Pen pen_1, Pen pen_2)
+        // the control's origin (0, 0) is at the top-left corner.
+        private void DrawLine(Vector v, Pen pen_m, Pen pen_s)
         {
-            graphics.DrawLine(
-                pen_2,
-                ConvertCoordsXtoX(v.X1) - 1,
-                ConvertCoordsYtoY(v.Y1) - 1,
-                ConvertCoordsXtoX(v.X2) - 1,
-                ConvertCoordsYtoY(v.Y2) - 1);
-            graphics.DrawLine(
-                pen_1,
-                ConvertCoordsXtoX(v.X1) - 2,
-                ConvertCoordsYtoY(v.Y1) - 1,
-                ConvertCoordsXtoX(v.X2) - 2,
-                ConvertCoordsYtoY(v.Y2) - 1);
+            // main line
+            int x1m = ConvertCoordsXtoX(v.X1) - 1;
+            int y1m = ConvertCoordsYtoY(v.Y1) - 1;
+            int x2m = ConvertCoordsXtoX(v.X2) - 1;
+            int y2m = ConvertCoordsYtoY(v.Y2) - 1;
+            graphics.DrawLine(pen_m, x1m, y1m, x2m, y2m);
+
+            // support line
+            int x1s = ConvertCoordsXtoX(v.X1) - 2;
+            int y1s = ConvertCoordsYtoY(v.Y1) - 1;
+            int x2s = ConvertCoordsXtoX(v.X2) - 2;
+            int y2s = ConvertCoordsYtoY(v.Y2) - 1;
+            graphics.DrawLine(pen_s, x1s, y1s, x2s, y2s);
         }
         
         private void RedrawLines()
@@ -159,13 +168,13 @@ namespace Protractor
         private void UpdateTooltipAngles()
         {
             string str_blue = string.Format("Blue angle value: {0}\n" +
-                                            "Copy to the clipboard (X)",
+                                            "Copy to Clipboard (X)",
                                             GetVectorString(v1, SYMBOLS_FULL));
             string str_red = string.Format("Red angle value: {0}\n" +
-                                           "Copy to the clipboard (C)",
+                                           "Copy to Clipboard (C)",
                                             GetVectorString(v2, SYMBOLS_FULL));
             string str_delta = string.Format("Delta angle value: {0}\n" +
-                                             "Copy to the clipboard (V)", 
+                                             "Copy to Clipboard (V)", 
                                             GetDeltaString(v1, v2, SYMBOLS_FULL));
             
             toolTipMain.SetToolTip(buttonCopyToClipboardBlue, str_blue);
@@ -221,14 +230,22 @@ namespace Protractor
                 { OpacityDown(); }
         }
 
-        private void CopyToClipboardVector(Vector v)
+        private void CopyToClipboardVector(Vector v, Control control)
         {
-            Clipboard.SetText(GetVectorString(v, SYMBOLS_FULL));
+            string value = GetVectorString(v, SYMBOLS_FULL);
+            Clipboard.SetText(value);
+
+            string message = "Copied:\n" + value;
+            ShowToolTipMessage(control, message);
         }
 
-        private void CopyToClipboardDelta(Vector v1, Vector v2)
+        private void CopyToClipboardDelta(Vector v1, Vector v2, Control control)
         {
-            Clipboard.SetText(GetDeltaString(v1, v2, SYMBOLS_FULL));
+            string value = GetDeltaString(v1, v2, SYMBOLS_FULL);
+            Clipboard.SetText(value);
+            
+            string message = "Copied:\n" + value;
+            ShowToolTipMessage(control, message);
         }
 
         private void ToggleDeltaLocked()
@@ -236,6 +253,11 @@ namespace Protractor
             isDeltaLocked = !isDeltaLocked;
             UpdateLabelAngles();
         }
+        
+        private void ToggleAngular()
+        {
+            menuToolAngular.Checked = !menuToolAngular.Checked;
+        }        
 
         private void ShowLineBlue()
         {
@@ -383,189 +405,6 @@ namespace Protractor
             v.SetVectorByAngle(0, 0, LENGTH, RecalculateAngle(new_angle));
         }
 
-        /*
-        Some key presses, such as the TAB, RETURN, ESC, and arrow keys, are typically
-        ignored by some controls because they are not considered input key presses.
-        For example, by default, a Button control ignores the arrow keys.
-        Pressing the arrow keys typically causes the focus to move to the previous
-        or next control. The arrow keys are considered navigation keys and pressing
-        these keys typically do not raise the KeyDown event for a Button.
-        However, pressing the arrow keys for a Button does raise the PreviewKeyDown event.
-        By handling the PreviewKeyDown event for a Button and setting the IsInputKey
-        property to true, you can raise the KeyDown event when the arrow keys are pressed.
-        However, if you handle the arrow keys, the focus will no longer move
-        to the previous or next control.
-        
-        See MSDN Control.PreviewKeyDown Event 
-        */
-        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Left:
-                case Keys.Right:
-                    e.IsInputKey = true;
-                    break;
-            }
-        }
-
-        private void FormMoveCenter()
-        {
-            Screen screen = Screen.FromControl(this);
-    
-            this.Left = (screen.Bounds.Width - this.Width) / 2;
-            this.Top = (screen.Bounds.Height - this.Height) / 2;
-        }
-        
-        private void FormMoveDirection(string str_dir, int value)
-        {
-            if (str_dir == "UP")
-                { this.Top -= value; }
-            
-            if (str_dir == "DOWN")
-                { this.Top += value; }
-            
-            if (str_dir == "LEFT")
-                { this.Left -= value; }
-            
-            if (str_dir == "RIGHT")
-                { this.Left += value; }
-        }
-        
-        // This provides a reliable solution to prevent the issue of window movement         
-        // via arrow keys becoming unresponsive when the form's TopMost property is set to true.
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == Keys.Up || keyData == Keys.Down || 
-                keyData == Keys.Left || keyData == Keys.Right)
-            {
-                int value = 1;
-                
-                if (keyData == Keys.Up)
-                    { FormMoveDirection("UP", value); }
-                if (keyData == Keys.Down)
-                    { FormMoveDirection("DOWN", value); }
-                if (keyData == Keys.Left)
-                    { FormMoveDirection("LEFT", value); }
-                if (keyData == Keys.Right)
-                    { FormMoveDirection("RIGHT", value); }
-
-                return true;
-            }
-    
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.T)
-            {
-                checkBoxAlwaysOnTop.Checked = !checkBoxAlwaysOnTop.Checked;
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.X)
-            {
-                CopyToClipboardVector(v1);
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.C)
-            {
-                CopyToClipboardVector(v2);
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.V)
-            {
-                CopyToClipboardDelta(v1, v2);
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.L)
-            {
-                checkBoxLockDelta.Checked = !checkBoxLockDelta.Checked;
-                e.Handled = true;
-            }
-
-            if (e.KeyCode == Keys.F1)
-            {
-                ShowHelp();
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.Home)
-            {
-                FormMoveCenter();
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
-            {
-                int value = 1;
-
-                if (e.Control && !e.Alt)
-                    { value = 10; }
-                if (!e.Control && e.Alt)
-                    { value = 50; }
-
-                if (e.KeyCode == Keys.Up)
-                    { FormMoveDirection("UP", value); }
-                if (e.KeyCode == Keys.Down)
-                    { FormMoveDirection("DOWN", value); }
-                if (e.KeyCode == Keys.Left)
-                    { FormMoveDirection("LEFT", value); }
-                if (e.KeyCode == Keys.Right)
-                    { FormMoveDirection("RIGHT", value); }
-
-                e.Handled = true;
-            }
-
-            if (e.KeyCode == Keys.D1 && !e.Control)
-            {
-                checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.D2 && !e.Control)
-            {
-                checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.D1 && e.Control)
-            {
-                SetAngleArbitrary("BLUE");
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.D2 && e.Control)
-            {
-                SetAngleArbitrary("RED");
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.U)
-            {
-                menuToolAngular.Checked = !menuToolAngular.Checked;
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.A)
-            {
-                menuToolAngular.Checked = true;
-                e.Handled = true;
-            }
-            
-            if (e.KeyCode == Keys.D)
-            {
-                menuToolDecimal.Checked = true;
-                e.Handled = true;
-            }
-        }
-
         private double GetDeltaRounded(double a1, double a2, int digits)
         {
             double delta = Math.Round(Math.Abs(a1 - a2), digits);
@@ -662,6 +501,211 @@ namespace Protractor
             }
         }
         
+        public void ShowToolTipMessage(Control control, string message)
+        {
+            ToolTip toolTip = new ToolTip();
+            toolTip.IsBalloon = true;
+
+            int x_offset = 0;
+            int y_offset = -55;
+            int duration = 700;
+            toolTip.Show(message, control, x_offset, y_offset, duration);
+        }
+        
+        private void FormMoveCenter()
+        {
+            Screen screen = Screen.FromControl(this);
+    
+            this.Left = (screen.Bounds.Width - this.Width) / 2;
+            this.Top = (screen.Bounds.Height - this.Height) / 2;
+        }
+        
+        private void FormMoveDirection(string str_dir, int value)
+        {
+            if (str_dir == "UP")
+            { this.Top -= value; }
+            
+            if (str_dir == "DOWN")
+            { this.Top += value; }
+            
+            if (str_dir == "LEFT")
+            { this.Left -= value; }
+            
+            if (str_dir == "RIGHT")
+            { this.Left += value; }
+        }
+        
+        // ====================================================================
+        // ====================================================================
+        // ====================================================================  
+        
+        /*
+            Some key presses, such as the TAB, RETURN, ESC, and arrow keys, are
+            typically ignored by some controls because they are not considered
+            input key presses.
+            For example, by default, a Button control ignores the arrow keys.
+            Pressing the arrow keys typically causes the focus to move to the
+            previous or next control. The arrow keys are considered navigation
+            keys and pressing these keys typically do not raise the KeyDown
+            event for a Button.
+            However, pressing the arrow keys for a Button does raise the
+            PreviewKeyDown event. By handling the PreviewKeyDown event for
+            a Button and setting the IsInputKey property to true, you can raise
+            the KeyDown event when the arrow keys are pressed.
+            However, if you handle the arrow keys, the focus will no longer
+            move to the previous or next control.
+
+            See MSDN Control.PreviewKeyDown Event 
+        */
+        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Right:
+                    e.IsInputKey = true;
+                    break;
+            }
+        }
+        
+        // This provides a reliable solution to prevent the issue of window movement         
+        // via arrow keys becoming unresponsive when the form's TopMost property is set to true.
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up || keyData == Keys.Down || 
+                keyData == Keys.Left || keyData == Keys.Right)
+            {
+                int value = 1;
+                
+                if (keyData == Keys.Up)
+                    { FormMoveDirection("UP", value); }
+                if (keyData == Keys.Down)
+                    { FormMoveDirection("DOWN", value); }
+                if (keyData == Keys.Left)
+                    { FormMoveDirection("LEFT", value); }
+                if (keyData == Keys.Right)
+                    { FormMoveDirection("RIGHT", value); }
+
+                return true;
+            }
+    
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.T)
+            {
+                checkBoxAlwaysOnTop.Checked = !checkBoxAlwaysOnTop.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.X)
+            {
+                CopyToClipboardVector(v1, buttonCopyToClipboardBlue);
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.C)
+            {
+                CopyToClipboardVector(v2, buttonCopyToClipboardRed);
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.V)
+            {
+                CopyToClipboardDelta(v1, v2, buttonCopyToClipboardDelta);
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.L)
+            {
+                checkBoxLockDelta.Checked = !checkBoxLockDelta.Checked;
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.F1)
+            {
+                ShowHelp();
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.Home)
+            {
+                FormMoveCenter();
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                int value = 1;
+
+                if (e.Control && !e.Alt)
+                    { value = 10; }
+                if (!e.Control && e.Alt)
+                    { value = 50; }
+
+                if (e.KeyCode == Keys.Up)
+                    { FormMoveDirection("UP", value); }
+                if (e.KeyCode == Keys.Down)
+                    { FormMoveDirection("DOWN", value); }
+                if (e.KeyCode == Keys.Left)
+                    { FormMoveDirection("LEFT", value); }
+                if (e.KeyCode == Keys.Right)
+                    { FormMoveDirection("RIGHT", value); }
+
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.D1 && !e.Control)
+            {
+                checkBoxShowLineBlue.Checked = !checkBoxShowLineBlue.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D2 && !e.Control)
+            {
+                checkBoxShowLineRed.Checked = !checkBoxShowLineRed.Checked;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D1 && e.Control)
+            {
+                SetAngleArbitrary("BLUE");
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D2 && e.Control)
+            {
+                SetAngleArbitrary("RED");
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.U)
+            {
+                ToggleAngular();
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.A)
+            {
+                menuToolAngular.Checked = true;
+                e.Handled = true;
+            }
+            
+            if (e.KeyCode == Keys.D)
+            {
+                menuToolDecimal.Checked = true;
+                e.Handled = true;
+            }
+        }
+        
+        // ====================================================================
+        // ====================================================================
+        // ====================================================================
+        
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -685,10 +729,18 @@ namespace Protractor
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
+            // Uses a system timers to throttle redraw operations
+            // during mouse movement.
+            if (mouse_stopwatch.ElapsedTicks < mouse_update_ticks)
+                { return; }
+            
             if (isDownLMB && e.Button == MouseButtons.Left && isBlueLine)
                 { RefreshVector(v1, sender, e); }
             if (isDownRMB && e.Button == MouseButtons.Right && isRedLine)
                 { RefreshVector(v2, sender, e); }
+            
+            // Restart system timers
+            mouse_stopwatch.Restart();
         }
         
         private void checkBoxAlwaysOnTop_CheckedChanged(object sender, EventArgs e)
@@ -726,22 +778,37 @@ namespace Protractor
 
         private void buttonCopyToClipboardBlue_Click(object sender, EventArgs e)
         {
-            CopyToClipboardVector(v1);
+            CopyToClipboardVector(v1, buttonCopyToClipboardBlue);
         }
 
         private void buttonCopyToClipboardRed_Click(object sender, EventArgs e)
         {
-            CopyToClipboardVector(v2);
+            CopyToClipboardVector(v2, buttonCopyToClipboardRed);
         }
 
         private void buttonCopyToClipboardDelta_Click(object sender, EventArgs e)
         {
-            CopyToClipboardDelta(v1, v2);
+            CopyToClipboardDelta(v1, v2, buttonCopyToClipboardDelta);
         }
 
         private void buttonHelp_Click(object sender, EventArgs e)
         {
             ShowHelp();
+        }
+
+        private void statusLabelBlue_Click(object sender, EventArgs e)
+        {
+            CopyToClipboardVector(v1, buttonCopyToClipboardBlue);
+        }
+        
+        private void statusLabelRed_Click(object sender, EventArgs e)
+        {
+            CopyToClipboardVector(v2, buttonCopyToClipboardRed);
+        }
+        
+        private void statusLabelDelta_Click(object sender, EventArgs e)
+        {
+            CopyToClipboardDelta(v1, v2, buttonCopyToClipboardDelta);
         }
         
         private void menuToolDecimal_CheckedChanged(object sender, EventArgs e)
@@ -779,37 +846,48 @@ namespace Protractor
         private void toolSetAngleRed180_Click(object sender, EventArgs e) { SetVectorAngle(v2, 180); }
         private void toolSetAngleRed270_Click(object sender, EventArgs e) { SetVectorAngle(v2, 270); }
         private void toolSetAngleRedArbitrary_Click(object sender, EventArgs e) { SetAngleArbitrary("RED"); }
+        
+        // ====================================================================
+        // ====================================================================
+        // ====================================================================
 
         private void ShowHelp()
         {
-            string msg_text = "Protractor 1.2.1 64-bit\n" +
-                              "Created by ap13ski\n" +
-                              "https://github.com/ap13ski\n" +
-                              "ap13ski@gmail.com\n" +
-                              "Special thanks to Eduardo Steffler Werner.\n\n\n" +
-                              "Press [F1] to show this information window.\n\n" +
-                              "Activate the Blue support line (BSL) and/or the Red support line (RSL)" +
-                              " using their corresponding switches in the lower-left corner" +
-                              " of the window or press [1] or [2]." +
-                              " The angle values will be displayed on the status bar.\n\n" +
-                              "To position the BSL (the RSL), click and hold the left (right) mouse button" +
-                              " anywhere in the window. For greater precision, you can release" +
-                              " the mouse button *anywhere* on the screen, including the area outside" +
-                              " the window.\n\n" +
-                              "Use the switch in the lower-left corner or press [L] to toggle the \u0022Lock" +
-                              " Delta Angle\u0022 mode.\n\n" +
-                              "Adjust the window opacity using the mouse wheel. Press [T] to toggle" +
-                              " \u0022Always on top\u0022 mode.\n\nUse the gear icon button" +
-                              " on the status bar or press [U] to toggle the angle value units." +
-                              " Press [A] to set angular units (d\u00b0 m' s\u0022), press [D] to set" +
-                              " decimal units (d,nnn\u00b0). This menu also allows you to set" +
-                              " fixed angle values of the support lines.\n" +
-                              "To set an arbitrary angle value, press [Ctrl+1] or [Ctrl+2].\n\n" +
-                              "Copy the angle values using the buttons in the lower-left corner of the window," +
-                              " located below the BSL and the RSL switches, or with [X], [C], [V].\n\n" +
-                              "Move the window with the arrow keys [\u2191], [\u2193], [\u2190], [\u2192] by 1px." +
-                              " Hold [Ctrl] or [Alt] to move the window by 10px or 50px, respectively." +
-                              " Press [Home] to center the window on the screen.\n\n";
+            string msg_text = 
+                "Protractor 1.3 64-bit\n" +
+                "Created by ap13ski\n" +
+                "https://github.com/ap13ski\n" +
+                "ap13ski@gmail.com\n" +
+                "Special thanks to Eduardo Steffler Werner.\n\n\n" +
+                "Press [F1] to show this information window.\n\n" +
+                "Activate the Blue support line (BSL) and/or the Red support" +
+                " line (RSL) using their corresponding switches in the" +
+                " lower-left corner of the window or press [1] or [2]." +
+                " The angle values will be displayed on the status bar.\n\n" +
+                "To position the BSL (the RSL), click and hold the left" +
+                " (right) mouse button anywhere in the window. For" +
+                " greater precision, you can release the mouse button" +
+                " *anywhere* on the screen, including the area outside" +
+                " the window.\n\n" +
+                "Use the switch in the lower-left corner or press [L]" +
+                " to toggle the \u0022Lock Delta Angle\u0022 mode.\n\n" +
+                "Adjust the window opacity using the mouse wheel. Press" +
+                " [T] to toggle \u0022Always on top\u0022 mode.\n\n" +
+                "Use the gear icon button on the status bar or press [U]" +
+                " to toggle the angle value units. Press [A] to set" +
+                " angular units (d\u00b0 m' s\u0022), press [D] to set" +
+                " decimal units (d,nnn\u00b0). This menu also allows" +
+                " you to set fixed angle values of the support lines.\n" +
+                "To set an arbitrary angle value, press [Ctrl+1] or" +
+                " [Ctrl+2].\n\n" +
+                "Copy the angle values using the buttons in the" +
+                " lower-left corner of the window, located below the BSL" +
+                " and the RSL switches, or with [X], [C], [V], or just" +
+                " click on the labels.\n\n" +
+                "Move the window with the arrow keys [\u2191], [\u2193]," +
+                " [\u2190], [\u2192] by 1px. Hold [Ctrl] or [Alt] to move" +
+                " the window by 10px or 50px, respectively." +
+                " Press [Home] to center the window on the screen.\n\n";
             
             string msg_caption = "Information";
             var msg_buttons = MessageBoxButtons.OK;

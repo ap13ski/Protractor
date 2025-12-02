@@ -1,8 +1,8 @@
-# Protractor 1.2.1
+# Protractor 1.3
 
 A simple C# (Windows Forms) application for measuring angles between any objects on the screen.
 
-You can download the executable file `Protractor.exe` on the [release page](https://github.com/ap13ski/Protractor/releases/tag/v1.2.1). 
+You can download the executable file `Protractor.exe` on the [release page](https://github.com/ap13ski/Protractor/releases/tag/v1.3). 
 
 You may need to [install](https://www.microsoft.com/en-us/download/details.aspx?id=49982) `.NET Framework 4.6.1` to run the program as well ([mirror](https://github.com/ap13ski/Protractor/releases/download/v1.0/default.NET_Runtime_Pack_Offline_Installer_NDP461-KB3102436-x86-x64-AllOS-ENU.exe)).
 
@@ -22,5 +22,4 @@ How to get started using Protractor:
 
 
 Hope you enjoy Protractor!
-
 Feel free to email your feedback and suggestions to `ap13ski@gmail.com`.

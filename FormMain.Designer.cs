@@ -433,23 +433,24 @@ namespace Protractor
             // 
             // statusLabelBlue
             // 
-            this.statusLabelBlue.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.statusLabelBlue.ForeColor = System.Drawing.Color.DarkBlue;
             this.statusLabelBlue.Name = "statusLabelBlue";
             this.statusLabelBlue.Size = new System.Drawing.Size(35, 22);
             this.statusLabelBlue.Text = "Blue";
+            this.statusLabelBlue.Click += new System.EventHandler(this.statusLabelBlue_Click);
             // 
             // statusLabelRed
             // 
             this.statusLabelRed.Name = "statusLabelRed";
             this.statusLabelRed.Size = new System.Drawing.Size(33, 22);
             this.statusLabelRed.Text = "Red";
+            this.statusLabelRed.Click += new System.EventHandler(this.statusLabelRed_Click);
             // 
             // statusLabelDelta
             // 
             this.statusLabelDelta.Name = "statusLabelDelta";
             this.statusLabelDelta.Size = new System.Drawing.Size(41, 22);
             this.statusLabelDelta.Text = "Delta";
+            this.statusLabelDelta.Click += new System.EventHandler(this.statusLabelDelta_Click);
             // 
             // buttonHelp
             // 
@@ -487,7 +488,7 @@ namespace Protractor
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.Opacity = 0.9D;
-            this.Text = "Protractor 1.2";
+            this.Text = "Protractor 1.3";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
